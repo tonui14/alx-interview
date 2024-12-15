@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """
-Prime Game: Determines the winner of multiple rounds of the game
+Prime Game: Determines the winner of multiple rounds of the game.
 """
+
 
 def is_prime(num):
     """
@@ -13,6 +14,7 @@ def is_prime(num):
         if num % i == 0:
             return False
     return True
+
 
 def isWinner(x, nums):
     """
@@ -41,7 +43,6 @@ def isWinner(x, nums):
     for i in range(1, max_n + 1):
         prime_counts[i] = prime_counts[i - 1] + (1 if is_prime_list[i] else 0)
 
-    # Initialize scores
     maria_wins = 0
     ben_wins = 0
 
