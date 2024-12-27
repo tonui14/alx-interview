@@ -7,6 +7,7 @@ The function `canUnlockAll` returns True if all boxes can be opened,
 otherwise False.
 """
 
+
 def canUnlockAll(boxes):
     """
     Determines if all boxes can be opened, starting with box 0.
@@ -20,22 +21,18 @@ def canUnlockAll(boxes):
     """
     # Set of unlocked boxes, starting with box 0 (the first box is unlocked)
     unlocked = {0}
-    
     # Initialize a flag to track if any new boxes are unlocked
     unlocked_new_boxes = True
-    
     # Keep looping until no new boxes are unlocked in one full pass
     while unlocked_new_boxes:
         unlocked_new_boxes = False
-        
         # Iterate through the unlocked boxes
-        for box_index in list(unlocked):  # Convert to list to prevent modification
+        for box_index in list(unlocked):
+            # Convert to list to prevent modification
             for key in boxes[box_index]:
-                # If the key corresponds to a valid box and it isn't unlocked yet, unlock it
+                # If the key corresponds to a valid box unlock it
                 if key < len(boxes) and key not in unlocked:
                     unlocked.add(key)
                     unlocked_new_boxes = True  # A new box was unlocked
-    
-    # If the number of unlocked boxes equals the total number of boxes, return True
+                    # If the no of open boxes = total no of boxes, return True
     return len(unlocked) == len(boxes)
-
