@@ -17,15 +17,15 @@ def minOperations(n):
     """
     if n <= 1:
         return 0
-
     operations = 0
-    # Start with 1 'H'
-    current = 1
-
-    # Iterate over possible divisors of n
-    for i in range(2, n + 1):
-        while n % i == 0:
-            operations += i
-            n //= i
-
-    return operations
+    factor = 2
+    # Find all factors of n and add to the operation count
+    while factor * factor <= n:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+            factor += 1
+            # If n is still greater than 1, it's a prime factor
+            if n > 1:
+                operations += n
+                return operations
