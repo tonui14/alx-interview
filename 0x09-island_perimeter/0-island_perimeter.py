@@ -1,42 +1,35 @@
 #!/usr/bin/python3
+"""
+Module to calculate the perimeter of an island represented in a grid.
+"""
+
 
 def island_perimeter(grid):
     """
-    Function to calculate the perimeter of an island in a grid.
+    Calculates the perimeter of the island described in grid.
 
     Args:
-    grid (list of list of integers): 2D grid where 1 represents land and 0 represents water.
-
+        grid (list of list of int): A list of lists where 0 represents water
+                                    and 1 represents land.
     Returns:
-    int: The perimeter of the island.
+        int: The perimeter of the island.
     """
-    perimeter = 0
     rows = len(grid)
-    cols = len(grid[0])
+    cols = len(grid[0]) if rows > 0 else 0
+    perimeter = 0
 
-    # Loop through each cell in the grid
     for i in range(rows):
         for j in range(cols):
-            # Check if the current cell is land (1)
             if grid[i][j] == 1:
-                # Start with 4 sides for the perimeter of the land
+                # Add 4 for each land cell
                 perimeter += 4
-                
-                # Check if there is land to the left
-                if i > 0 and grid[i-1][j] == 1:
-                    perimeter -= 1
-                
-                # Check if there is land to the right
-                if i < rows - 1 and grid[i+1][j] == 1:
-                    perimeter -= 1
-                
-                # Check if there is land above
-                if j > 0 and grid[i][j-1] == 1:
-                    perimeter -= 1
-                
-                # Check if there is land below
-                if j < cols - 1 and grid[i][j+1] == 1:
-                    perimeter -= 1
-    
-    return perimeter
 
+                # Subtract 2 for each adjacent land cell (vertical)
+                if i > 0 and grid[i - 1][j] == 1:
+                    perimeter -= 2
+
+                # Subtract 2 for each adjacent land cell (horizontal)
+                if j > 0 and grid[i][j - 1] == 1:
+                    perimeter -= 2
+
+    return perimeter
