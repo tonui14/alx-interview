@@ -10,6 +10,7 @@ def print_stats(total_size, status_counts):
     for status_code in sorted(status_counts):
         print(f"{status_code}: {status_counts[status_code]}")
 
+
 def main():
     """Main function to process the log lines."""
     total_size = 0
@@ -44,6 +45,7 @@ def main():
         raise
 
     print_stats(total_size, status_counts)
+
 
 if __name__ == "__main__":
     main()
