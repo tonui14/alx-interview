@@ -1,50 +1,49 @@
 #!/usr/bin/python3
+"""
+Log parsing script that reads stdin line by line and computes metrics.
+"""
 import sys
-import signal
 
-# Initialize variables
-total_file_size = 0
-status_codes_count = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-line_count = 0
-
-def print_metrics():
+def print_stats(total_size, status_counts):
     """Print the accumulated metrics."""
-    print(f"File size: {total_file_size}")
-    for code in sorted(status_codes_count.keys()):
-        if status_codes_count[code] > 0:
-            print(f"{code}: {status_codes_count[code]}")
+    print(f"File size: {total_size}")
+    for status_code in sorted(status_counts):
+        print(f"{status_code}: {status_counts[status_code]}")
 
-def signal_handler(sig, frame):
-    """Handle keyboard interruption."""
-    print_metrics()
-    sys.exit(0)
+def main():
+    """Main function to process the log lines."""
+    total_size = 0
+    status_counts = {}
+    line_count = 0
 
-signal.signal(signal.SIGINT, signal_handler)
-
-# Process each line from stdin
-for line in sys.stdin:
-    line_count += 1
-    parts = line.split()
-
-    # Check if line format is valid
-    if len(parts) < 7:
-        continue  # Skip invalid lines
-
-    # Extract the file size and status code
     try:
-        status_code = int(parts[5])
-        file_size = int(parts[6])
-    except (ValueError, IndexError):
-        continue  # Skip if not convertible to int
+        for line in sys.stdin:
+            line = line.strip()
+            line_count += 1
 
-    # Update metrics
-    total_file_size += file_size
-    if status_code in status_codes_count:
-        status_codes_count[status_code] += 1
+            try:
+                parts = line.split()
+                if len(parts) < 7:
+                    continue
 
-    # Print metrics every 10 lines
-    if line_count % 10 == 0:
-        print_metrics()
+                file_size = int(parts[-1])
+                status_code = parts[-2]
 
-# Final output if the script finishes without interruption
-print_metrics()
+                total_size += file_size
+
+                if status_code.isdigit():
+                    status_counts[status_code] = status_counts.get(status_code, 0) + 1
+            except (ValueError, IndexError):
+                continue
+
+            if line_count % 10 == 0:
+                print_stats(total_size, status_counts)
+
+    except KeyboardInterrupt:
+        print_stats(total_size, status_counts)
+        raise
+
+    print_stats(total_size, status_counts)
+
+if __name__ == "__main__":
+    main()
